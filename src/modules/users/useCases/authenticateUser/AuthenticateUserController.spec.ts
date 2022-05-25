@@ -3,7 +3,6 @@ import { Connection } from "typeorm";
 import  createConnection  from "../../../../database/index";
 import { app } from "../../../../app";
 import auth from "../../../../config/auth";
-import { IncorrectEmailOrPasswordError } from "./IncorrectEmailOrPasswordError";
 
 let connection: Connection;
 describe("POST: /api/v1/sessions", () => {
@@ -37,9 +36,8 @@ describe("POST: /api/v1/sessions", () => {
         });
         expect(response.body).toHaveProperty("token");
     });
-    /*it("Should not be able authenticate an nonexistent User", () => {
-        expect(async () => {
-            await request(app)
+    it("Should not be able authenticate an nonexistent User", async () => {
+        const user = await request(app)
             .post("/api/v1/users")
             .send({
                 name:"flavia",
@@ -47,17 +45,16 @@ describe("POST: /api/v1/sessions", () => {
                 password:"pass#flavia"
             });
             auth.jwt.secret = "pass#flavia";
-            await request(app)
+            const response = await request(app)
             .post("/api/v1/sessions")
             .send({
                 email:"email@flaviaBetel.com",
-                password:"pass#flavia"
+                password:user.body.password
             })
-        }).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError);
+        expect(response.status).toBe(401);
     });
-    it("Should not be able authenticate with incorrect password", () => {
-        expect(async () => {
-            await request(app)
+    it("Should not be able authenticate with incorrect password", async () => {
+        const user = await request(app)
             .post("/api/v1/users")
             .send({
                 name:"Joabe",
@@ -65,13 +62,13 @@ describe("POST: /api/v1/sessions", () => {
                 password:"pass#joabe"
             });
             auth.jwt.secret = "pass#joabe"
-            await request(app)
+            const response = await request(app)
             .post("/api/v1/sessions")
             .send({
-                email:"email@joabe.com",
+                email:user.body.email,
                 password:"pass#joabe$php"
             });
-        }).rejects.toBeInstanceOf(IncorrectEmailOrPasswordError);
-    });*/
+        expect(response.status).toBe(401);
+    });
 
 });
