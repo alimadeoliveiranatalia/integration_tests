@@ -3,8 +3,10 @@ import { Connection } from "typeorm";
 import  createConnection  from "../../../../database/index";
 import { app } from "../../../../app";
 
+
+
 let connection: Connection;
-describe("Create User Controller", () => {
+describe("POST: /api/v1/users", () => {
     beforeAll(async () => {
         connection = await createConnection();
 
