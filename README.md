@@ -22,6 +22,7 @@
 <ul>
     <li>Node.JS</li>
     <li>JWT (JSON WEB TOKEN)</li>
+    <li>SOLID</li>
     <li>Express</li>
     <li>Jest</li>
     <li>Supertest</li>
